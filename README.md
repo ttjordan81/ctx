@@ -286,6 +286,11 @@ ctx ignore --list           # List current ignore patterns
 ctx ignore "*.log"          # Add a pattern
 ctx ignore -r "*.log"       # Remove a pattern
 
+# Git hooks
+ctx hook install    # Install post-commit + pre-push hooks
+ctx hook remove     # Remove Ctx hooks
+ctx hook status     # Show installed hooks
+
 # Query options
   -t, --type      # Filter by event type
   -a, --agent     # Filter by agent
@@ -295,7 +300,64 @@ ctx ignore -r "*.log"       # Remove a pattern
   -l, --limit     # Limit results
 ```
 
-## 🔄 Integration Examples
+## � Git Hooks
+
+Ctx can automatically record context when you commit or push code, creating a timeline of your project's evolution.
+
+### Auto-detection
+
+During `ctx init`, if a Git repository is detected, Ctx will offer to install hooks:
+
+```
+🔗 Git repository detected.
+
+  Ctx can automatically record context when you commit or push code.
+  This creates a timeline of your project's evolution — every commit
+  and push becomes part of your project's memory.
+
+  Install Git hooks? (Y/n)
+```
+
+### What gets recorded
+
+**On `git commit`** (runs in background — doesn't slow Git):
+```json
+{
+  "event": "git_commit",
+  "data": {
+    "hash": "391f474",
+    "message": "add login route",
+    "author": "Tim Jordan",
+    "branch": "main",
+    "files_changed": "src/auth.ts,src/routes.ts"
+  },
+  "agent": "git"
+}
+```
+
+**On `git push`** (runs synchronously — records before code leaves):
+```json
+{
+  "event": "git_push",
+  "data": {
+    "remote": "origin",
+    "branch": "main",
+    "commits_pushed": 3
+  },
+  "agent": "git"
+}
+```
+
+### Manual management
+
+```bash
+ctx hook install    # Install hooks anytime
+ctx hook remove     # Remove hooks (preserves other Git hooks)
+ctx hook status     # Check which hooks are active
+ctx init --no-hooks # Skip the hooks prompt during init
+```
+
+## �🔄 Integration Examples
 
 ### Express.js Middleware
 ```javascript
