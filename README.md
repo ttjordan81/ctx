@@ -1,4 +1,4 @@
-# Ctx - Git for AI Context and Agent Memory
+# Ctx - It's like Git for your Project, but for AI Context and Agent Memory
 
 > **Ctx** tracks what AI systems think, decide, and do—just like Git tracks code changes.
 
