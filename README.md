@@ -1,38 +1,151 @@
-# Ctx - Project Memory for AI Agents
+# Ctx - Project Memory Built In
 
-> **Ctx** gives your project a memory. Every project today has no memory. Each time you start or return to a project, you're essentially beginning from a blank slate.
+> **Git tracks code. Ctx tracks intelligence.**
 
-> What if your project had agents living inside it—agents that remember decisions, retain prompts, and preserve the reasoning traces behind how the project evolved?
+## The Problem
 
-## 🎯 The Problem
+Today, most projects have **no memory**.
 
-**Every project today has no memory.**
+Teams work inside folders full of documents, code, notes, and decisions. But the **reasoning behind the work is constantly lost**.
 
-Each time you start or return to a project, you're essentially beginning from a blank slate. Decisions are forgotten, prompts are lost, and the reasoning behind how your project evolved vanishes into thin air.
+A team might have:
 
-What if your project had agents living inside it—agents that remember decisions, retain prompts, and preserve the reasoning traces behind how the project evolved?
+* a shared folder with documents
+* a Git repository with code
+* Slack conversations about decisions
+* prompts used with AI tools
+* analysis done with LLMs
 
-## 🚀 The Solution
+But none of that context is **captured in one place**.
 
-**Ctx** gives your project a memory—agents that live inside your project and remember everything:
+When someone joins the project, or when the team revisits the work months later, they have to ask:
 
-- **Decisions**: Why choices were made and what influenced them
-- **Prompts**: The exact prompts that produced successful results  
-- **Reasoning**: The thought processes behind project evolution
-- **Context**: The complete history of how your project came to be
+* Why was this decision made?
+* What prompt generated this document?
+* What analysis led to this architecture?
+* What discussions shaped this approach?
 
-Now your project has agents that remember decisions, retain prompts, and preserve the reasoning traces behind how the project evolved.
+The project exists, but **the thinking behind it disappears**.
+
+## The Idea
+
+What if every project had **memory built into it**?
+
+Imagine opening a folder and, alongside your documents or code, there was a small system that continuously captured:
+
+* decisions made by the team
+* prompts used with AI
+* reasoning traces from agents
+* analysis done on documents
+* conversations that shaped the work
+
+Instead of losing this context, the project would **remember how it evolved**.
+
+## Example: A Team Document Folder
+
+Imagine a shared folder like this:
+
+```
+grant-proposal/
+├── documents/
+│   ├── rfp.pdf
+│   ├── proposal_draft.docx
+│   └── research_notes.md
+│
+├── analysis/
+│   └── scoring_matrix.xlsx
+│
+├── code/
+│   └── data_parser.py
+│
+└── .ctx/
+    ├── events.log
+    ├── prompts/
+    ├── decisions/
+    └── agent_traces/
+```
+
+Inside `.ctx`, the project stores things like:
+
+* the prompts used to analyze the RFP
+* the reasoning behind scoring decisions
+* agent outputs used to draft sections
+* notes explaining why certain strategies were chosen
+
+Now the project doesn't just contain **files**.
+
+It contains the **memory of how the work happened**.
+
+## Example: Coding Projects
+
+A coding project might look like this:
 
 ```
 my-app/
- ├── src/
- ├── package.json
- └── .ctx/
-      ├── context.db     # SQLite database
-      ├── events.log     # Human-readable log
-      ├── agents/        # Agent-specific data
-      └── sessions/      # Session tracking
+├── src/
+├── tests/
+├── package.json
+├── README.md
+└── .ctx/
 ```
+
+Inside `.ctx`, the system records things like:
+
+* prompts used to generate code
+* architecture decisions
+* reasoning behind refactoring
+* AI-assisted debugging steps
+* agent workflows that ran during development
+
+Months later, the team can inspect:
+
+```
+ctx history
+```
+
+And see:
+
+```
+Feb 12 — Agent analyzed performance bottleneck
+Feb 13 — Refactor recommended for API layer
+Feb 14 — Prompt used to generate authentication module
+Feb 15 — Decision made to move from Redis to Postgres cache
+```
+
+The project becomes **self-documenting**.
+
+## The Big Idea
+
+Git tracks **how code changes over time**.
+
+But modern work involves much more than code.
+
+Projects now include:
+
+* AI prompts
+* document analysis
+* reasoning steps
+* decisions made with LLMs
+* agent workflows
+
+All of this context currently **disappears**.
+
+**Ctx** introduces a simple concept:
+
+**Every project should have memory.**
+
+A lightweight system inside the project folder captures:
+
+* decisions
+* prompts
+* reasoning
+* agent activity
+
+So the project doesn't just contain files.
+
+It contains the **history of how the thinking evolved**.
+
+> **Git tracks code. Ctx tracks intelligence.**
 
 ## 📦 Installation
 
