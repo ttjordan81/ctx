@@ -6,6 +6,18 @@ import { Ctx } from './context';
 import { join } from 'path';
 import { existsSync } from 'fs';
 import { promises as fs } from 'fs';
+import { createInterface } from 'readline';
+import { isGitInstalled, isGitRepo, installHooks, removeHooks, getHookStatus, loadConfig, saveConfig } from './hooks';
+
+function askQuestion(question: string): Promise<string> {
+  const rl = createInterface({ input: process.stdin, output: process.stdout });
+  return new Promise((resolve) => {
+    rl.question(question, (answer: string) => {
+      rl.close();
+      resolve(answer.trim().toLowerCase());
+    });
+  });
+}
 
 const program = new Command();
 
@@ -17,13 +29,44 @@ program
 program
   .command('init')
   .description('Initialize a new ctx repository')
-  .action(async () => {
+  .option('--no-hooks', 'Skip Git hooks prompt')
+  .action(async (options) => {
     const ctx = new Ctx();
     try {
       await ctx.init();
       await ctx.createDefaultIgnoreFile();
       console.log(chalk.green('✅ Context repository initialized'));
       console.log(chalk.gray('📝 Created .ctxignore file - customize it to control what gets tracked'));
+      
+      // Git hooks detection
+      const ctxDir = join(process.cwd(), '.ctx');
+      
+      if (options.hooks !== false && isGitInstalled() && isGitRepo(process.cwd())) {
+        console.log('');
+        console.log(chalk.blue('🔗 Git repository detected.'));
+        console.log('');
+        console.log(chalk.white('  Ctx can automatically record context when you commit or push code.'));
+        console.log(chalk.white('  This creates a timeline of your project\'s evolution — every commit'));
+        console.log(chalk.white('  and push becomes part of your project\'s memory.'));
+        console.log('');
+        
+        const answer = await askQuestion(chalk.yellow('  Install Git hooks? (Y/n) '));
+        
+        if (answer === '' || answer === 'y' || answer === 'yes') {
+          const result = await installHooks(process.cwd(), ctxDir);
+          console.log(chalk.green(`✅ Git hooks installed: ${result.installed.join(', ')}`));
+        } else {
+          console.log(chalk.gray('  Skipped. You can install hooks later with: ctx hook install'));
+          const config = await loadConfig(ctxDir);
+          config.hooks_offered = true;
+          await saveConfig(ctxDir, config);
+        }
+      } else if (!isGitInstalled() || !isGitRepo(process.cwd())) {
+        // Save that we haven't offered hooks yet (Git not available)
+        const config = await loadConfig(ctxDir);
+        config.hooks_offered = false;
+        await saveConfig(ctxDir, config);
+      }
     } catch (error) {
       console.error(chalk.red('❌ Failed to initialize:', error));
       process.exit(1);
@@ -247,6 +290,90 @@ program
       await ctx.close();
     } catch (error) {
       console.error(chalk.red('❌ Failed to manage ignore patterns:', error));
+      process.exit(1);
+    }
+  });
+
+const hook = program
+  .command('hook')
+  .description('Manage Git hooks for automatic context recording');
+
+hook
+  .command('install')
+  .description('Install Git hooks (post-commit + pre-push)')
+  .action(async () => {
+    try {
+      const ctxDir = join(process.cwd(), '.ctx');
+      
+      if (!existsSync(ctxDir)) {
+        console.error(chalk.red('❌ Not a ctx repository. Run "ctx init" first.'));
+        process.exit(1);
+      }
+      
+      if (!isGitInstalled()) {
+        console.error(chalk.red('❌ Git is not installed on this system.'));
+        process.exit(1);
+      }
+      
+      if (!isGitRepo(process.cwd())) {
+        console.error(chalk.red('❌ Not a Git repository. Run "git init" first.'));
+        process.exit(1);
+      }
+      
+      const result = await installHooks(process.cwd(), ctxDir);
+      console.log(chalk.green(`✅ Git hooks installed: ${result.installed.join(', ')}`));
+      console.log(chalk.gray('  Ctx will now record context on every commit and push.'));
+    } catch (error) {
+      console.error(chalk.red('❌ Failed to install hooks:', error));
+      process.exit(1);
+    }
+  });
+
+hook
+  .command('remove')
+  .description('Remove Ctx Git hooks')
+  .action(async () => {
+    try {
+      const ctxDir = join(process.cwd(), '.ctx');
+      
+      if (!isGitRepo(process.cwd())) {
+        console.error(chalk.red('❌ Not a Git repository.'));
+        process.exit(1);
+      }
+      
+      const result = await removeHooks(process.cwd(), ctxDir);
+      if (result.removed.length > 0) {
+        console.log(chalk.green(`✅ Git hooks removed: ${result.removed.join(', ')}`));
+      } else {
+        console.log(chalk.yellow('No Ctx hooks found to remove.'));
+      }
+    } catch (error) {
+      console.error(chalk.red('❌ Failed to remove hooks:', error));
+      process.exit(1);
+    }
+  });
+
+hook
+  .command('status')
+  .description('Show which Ctx Git hooks are installed')
+  .action(async () => {
+    try {
+      if (!isGitRepo(process.cwd())) {
+        console.log(chalk.yellow('Not a Git repository.'));
+        return;
+      }
+      
+      const status = await getHookStatus(process.cwd());
+      
+      console.log(chalk.blue('Git Hook Status:\n'));
+      console.log(`  post-commit: ${status.postCommit ? chalk.green('✅ installed') : chalk.gray('not installed')}`);
+      console.log(`  pre-push:    ${status.prePush ? chalk.green('✅ installed') : chalk.gray('not installed')}`);
+      
+      if (!status.postCommit && !status.prePush) {
+        console.log(chalk.gray('\n  Run "ctx hook install" to enable automatic context recording.'));
+      }
+    } catch (error) {
+      console.error(chalk.red('❌ Failed to check hook status:', error));
       process.exit(1);
     }
   });
