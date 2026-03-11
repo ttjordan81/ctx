@@ -26,6 +26,10 @@ export class Ctx {
   async init(): Promise<void> {
     try {
       await fs.mkdir(this.config.dataDir, { recursive: true });
+      
+      // Secure directory permissions
+      await fs.chmod(this.config.dataDir, 0o700); // owner only
+      
       await this.storage.initialize();
       console.log('✅ Ctx initialized in', this.config.dataDir);
     } catch (error) {
@@ -52,6 +56,34 @@ export class Ctx {
     } catch (error) {
       console.error('❌ Failed to record context:', error);
       throw error;
+    }
+  }
+
+  async shouldIgnorePath(path: string): Promise<boolean> {
+    return this.storage.shouldIgnore(path);
+  }
+
+  async createDefaultIgnoreFile(): Promise<void> {
+    const ignorePath = join(this.config.dataDir, '.ctxignore');
+    
+    // Get the actual patterns from storage (which includes language detection)
+    await this.storage.loadIgnorePatterns();
+    const patterns = this.storage.getIgnorePatterns();
+    
+    // Deduplicate patterns while preserving order
+    const unique = [...new Set(patterns)];
+    
+    const defaultContent = `# Ctx ignore patterns
+# Similar to .gitignore but for context tracking
+# Generated automatically based on project type detection
+
+${unique.join('\n')}
+
+# Add your custom patterns below this line
+`;
+    
+    if (!(await fs.access(ignorePath).then(() => true).catch(() => false))) {
+      await fs.writeFile(ignorePath, defaultContent);
     }
   }
 

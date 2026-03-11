@@ -1,0 +1,181 @@
+{
+  "version": "1.0",
+  "description": "Default ignore patterns for Ctx - project memory tracking",
+  "patterns": {
+    "version_control": [
+      ".git/**",
+      ".svn/**",
+      ".hg/**",
+      ".bzr/**"
+    ],
+    "dependencies": [
+      "node_modules/**",
+      "vendor/**",
+      "packages/**",
+      "bower_components/**",
+      ".bundle/**",
+      "__pycache__/**",
+      "site-packages/**",
+      "target/**",
+      "build/**",
+      "dist/**"
+    ],
+    "build_outputs": [
+      "*.min.js",
+      "*.min.css",
+      "*.css.map",
+      "*.js.map",
+      "build/**",
+      "dist/**",
+      "out/**",
+      "bin/**",
+      "target/**",
+      "*.exe",
+      "*.dll",
+      "*.so",
+      "*.dylib",
+      "*.class",
+      "*.pyc",
+      "*.pyo",
+      "*.pyd"
+    ],
+    "environment": [
+      ".env*",
+      "*.key",
+      "*.pem",
+      "*.crt",
+      "secrets/**",
+      "credentials/**",
+      ".aws/**",
+      ".ssh/**",
+      ".vault*",
+      "*.token"
+    ],
+    "logs": [
+      "*.log",
+      "logs/**",
+      ".log/**"
+    ],
+    "temp": [
+      ".tmp/**",
+      ".cache/**",
+      "*.swp",
+      "*.swo",
+      "*~",
+      ".#*",
+      "#*#",
+      "*.tmp",
+      "*.temp",
+      "temp/**",
+      "tmp/**"
+    ],
+    "ide": [
+      ".vscode/**",
+      ".idea/**",
+      "*.sublime-*",
+      ".eclipse/**",
+      ".netbeans/**",
+      "*.code-workspace"
+    ],
+    "large_binaries": [
+      "*.mp4",
+      "*.avi",
+      "*.mov",
+      "*.wmv",
+      "*.zip",
+      "*.tar.gz",
+      "*.tgz",
+      "*.rar",
+      "*.7z",
+      "*.pdf",
+      "*.psd",
+      "*.ai",
+      "*.sketch",
+      "*.dmg",
+      "*.iso"
+    ],
+    "database": [
+      "*.db",
+      "*.sqlite",
+      "*.sqlite3",
+      "*.mdb",
+      "*.accdb"
+    ],
+    "test_artifacts": [
+      "coverage/**",
+      ".nyc_output/**",
+      "test-results/**",
+      "*.lcov",
+      ".coverage"
+    ],
+    "docs_build": [
+      "_site/**",
+      "docs/build/**",
+      "docs/_build/**",
+      ".doxygen/**"
+    ]
+  },
+  "language_specific": {
+    "javascript": [
+      "*.js.map",
+      "*.d.ts.map",
+      "node_modules/.cache/**"
+    ],
+    "python": [
+      "__pycache__/**",
+      "*.pyc",
+      "*.pyo",
+      "*.pyd",
+      ".pytest_cache/**",
+      ".mypy_cache/**",
+      "venv/**",
+      "env/**",
+      ".env/**"
+    ],
+    "java": [
+      "target/**",
+      "*.class",
+      "*.jar",
+      "*.war",
+      "*.ear",
+      ".gradle/**",
+      ".mvn/**"
+    ],
+    "rust": [
+      "target/**",
+      "Cargo.lock",
+      "**/*.rs.bk"
+    ],
+    "go": [
+      "vendor/**",
+      "*.exe",
+      "*.test"
+    ],
+    "ruby": [
+      "vendor/**",
+      "*.gem",
+      ".bundle/**",
+      "_site/**"
+    ],
+    "php": [
+      "vendor/**",
+      "composer.lock",
+      "*.cache"
+    ],
+    "csharp": [
+      "bin/**",
+      "obj/**",
+      "packages/**",
+      "*.dll",
+      "*.exe"
+    ],
+    "cpp": [
+      "build/**",
+      "CMakeFiles/**",
+      "CMakeCache.txt",
+      "*.o",
+      "*.a",
+      "*.so"
+    ]
+  }
+}

@@ -100,7 +100,7 @@ Inside `.ctx`, the system records things like:
 Months later, the team can inspect:
 
 ```
-ctx history
+ctx inspect
 ```
 
 And see:
@@ -280,6 +280,11 @@ ctx status        # Show repository status
 ctx log <event>   # Record new event
 ctx query         # Search events
 ctx inspect       # Show recent events
+
+# Ignore patterns
+ctx ignore --list           # List current ignore patterns
+ctx ignore "*.log"          # Add a pattern
+ctx ignore -r "*.log"       # Remove a pattern
 
 # Query options
   -t, --type      # Filter by event type
