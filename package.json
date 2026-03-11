@@ -1,11 +1,25 @@
 {
-  "name": "ctx",
+  "name": "@contextlab/ctx",
   "version": "0.1.0",
   "description": "Git for AI context and agent memory",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
     "ctx": "dist/cli.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ttjordan81/ctx.git"
+  },
+  "homepage": "https://github.com/ttjordan81/ctx#readme",
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/cli.ts",

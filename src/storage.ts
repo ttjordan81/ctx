@@ -15,7 +15,7 @@ interface IgnoreConfig {
 }
 
 export class ContextStorage {
-  private db: sqlite3.Database;
+  private db!: sqlite3.Database;
   private config: ContextConfig;
   private ignorePatterns: string[] = [];
   private eventCounts = new Map<string, number>();
@@ -25,7 +25,6 @@ export class ContextStorage {
 
   constructor(config: ContextConfig) {
     this.config = config;
-    this.db = new sqlite3.Database(config.dbPath);
     this.ignoreConfig = defaultIgnoreConfig as IgnoreConfig;
   }
 
@@ -150,6 +149,9 @@ export class ContextStorage {
   }
 
   async initialize(): Promise<void> {
+    // Open DB now that the data directory exists
+    this.db = new sqlite3.Database(this.config.dbPath);
+    
     // Load ignore patterns first
     await this.loadIgnorePatterns();
     

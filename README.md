@@ -150,7 +150,7 @@ It contains the **history of how the thinking evolved**.
 ## 📦 Installation
 
 ```bash
-npm install -g ctx
+npm install -g @contextlab/ctx
 ```
 
 ## 🎮 Quick Start
@@ -187,7 +187,7 @@ ctx query -t proposal_scored --since 2026-03-10
 ## 💻 Node.js SDK
 
 ```javascript
-const { Ctx } = require('ctx');
+const { Ctx } = require('@contextlab/ctx');
 
 const context = new Ctx();
 
@@ -357,11 +357,11 @@ ctx hook status     # Check which hooks are active
 ctx init --no-hooks # Skip the hooks prompt during init
 ```
 
-## �🔄 Integration Examples
+## �� Integration Examples
 
 ### Express.js Middleware
 ```javascript
-const { Ctx } = require('ctx');
+const { Ctx } = require('@contextlab/ctx');
 const context = new Ctx();
 
 // Auto-log API calls
@@ -381,7 +381,7 @@ app.use(async (req, res, next) => {
 
 ### LangChain Integration
 ```javascript
-import { Ctx } from 'ctx';
+import { Ctx } from '@contextlab/ctx';
 
 const context = new Ctx();
 
