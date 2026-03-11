@@ -1,14 +1,27 @@
-# Ctx - It's like Git for your Project, but for AI Context and Agent Memory
+# Ctx - Project Memory for AI Agents
 
-> **Ctx** tracks what AI systems think, decide, and do—just like Git tracks code changes.
+> **Ctx** gives your project a memory. Every project today has no memory. Each time you start or return to a project, you're essentially beginning from a blank slate.
+
+> What if your project had agents living inside it—agents that remember decisions, retain prompts, and preserve the reasoning traces behind how the project evolved?
 
 ## 🎯 The Problem
 
-AI systems today have **no memory**. Every run is a blank slate. Agents forget decisions, prompts get lost, and reasoning traces vanish.
+**Every project today has no memory.**
+
+Each time you start or return to a project, you're essentially beginning from a blank slate. Decisions are forgotten, prompts are lost, and the reasoning behind how your project evolved vanishes into thin air.
+
+What if your project had agents living inside it—agents that remember decisions, retain prompts, and preserve the reasoning traces behind how the project evolved?
 
 ## 🚀 The Solution
 
-**Ctx** gives every AI project a persistent contextual memory layer:
+**Ctx** gives your project a memory—agents that live inside your project and remember everything:
+
+- **Decisions**: Why choices were made and what influenced them
+- **Prompts**: The exact prompts that produced successful results  
+- **Reasoning**: The thought processes behind project evolution
+- **Context**: The complete history of how your project came to be
+
+Now your project has agents that remember decisions, retain prompts, and preserve the reasoning traces behind how the project evolved.
 
 ```
 my-app/
