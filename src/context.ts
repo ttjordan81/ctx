@@ -1,6 +1,6 @@
 import { ContextStorage } from './storage';
 import { ContextRecord, ContextEvent, ContextQuery, ContextConfig } from './types';
-import { join } from 'path';
+import { join, dirname } from 'path';
 import { promises as fs } from 'fs';
 
 export class Ctx {
@@ -31,10 +31,32 @@ export class Ctx {
       await fs.chmod(this.config.dataDir, 0o700); // owner only
       
       await this.storage.initialize();
+      await this.updateGitignore();
       console.log('✅ Ctx initialized in', this.config.dataDir);
     } catch (error) {
       console.error('❌ Failed to initialize Ctx:', error);
       throw error;
+    }
+  }
+
+  private async updateGitignore(): Promise<void> {
+    const projectRoot = dirname(this.config.dataDir);
+    const gitignorePath = join(projectRoot, '.gitignore');
+    
+    try {
+      const content = await fs.readFile(gitignorePath, 'utf-8');
+      
+      // Check if .ctx/ is already in .gitignore
+      const lines = content.split('\n').map(l => l.trim());
+      if (lines.includes('.ctx/') || lines.includes('.ctx')) {
+        return;
+      }
+      
+      // Append .ctx/ entry
+      const entry = '\n# Ctx (AI context memory)\n.ctx/\n';
+      await fs.appendFile(gitignorePath, entry);
+    } catch {
+      // .gitignore doesn't exist — skip silently
     }
   }
 

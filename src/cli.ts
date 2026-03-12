@@ -77,6 +77,7 @@ program
 
 program
   .command('log')
+  .alias('record')
   .description('Record a new context event')
   .argument('<event>', 'Event type/name')
   .option('-d, --data <data>', 'Event data (JSON string)')

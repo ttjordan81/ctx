@@ -50,7 +50,7 @@ if [ -d "${ctxDir}" ]; then
   FILES=$(git diff-tree --no-commit-id --name-only -r HEAD 2>/dev/null | tr '\\n' ',' | sed 's/,$//')
   
   # Run in background so git isn't slowed down
-  (npx ctx log git_commit -d "{\\"hash\\":\\"$HASH\\",\\"message\\":\\"$MESSAGE\\",\\"author\\":\\"$AUTHOR\\",\\"branch\\":\\"$BRANCH\\",\\"files_changed\\":\\"$FILES\\"}" -a git 2>/dev/null &)
+  (ctx record git_commit -d "{\\"hash\\":\\"$HASH\\",\\"message\\":\\"$MESSAGE\\",\\"author\\":\\"$AUTHOR\\",\\"branch\\":\\"$BRANCH\\",\\"files_changed\\":\\"$FILES\\"}" -a git 2>/dev/null || true &)
 fi
 ${CTX_HOOK_END}`;
 }
@@ -65,7 +65,7 @@ if [ -d "${ctxDir}" ]; then
   COUNT=$(git log --oneline @{u}..HEAD 2>/dev/null | wc -l | tr -d ' ')
   
   # Run synchronously so we record before code leaves the machine
-  npx ctx log git_push -d "{\\"remote\\":\\"$REMOTE\\",\\"branch\\":\\"$BRANCH\\",\\"commits_pushed\\":$COUNT}" -a git 2>/dev/null
+  ctx record git_push -d "{\\"remote\\":\\"$REMOTE\\",\\"branch\\":\\"$BRANCH\\",\\"commits_pushed\\":$COUNT}" -a git 2>/dev/null || true
 fi
 ${CTX_HOOK_END}`;
 }

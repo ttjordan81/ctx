@@ -22,6 +22,7 @@ export class ContextStorage {
   private readonly MAX_EVENT_SIZE = 1000000; // 1MB
   private readonly MAX_EVENTS_PER_HOUR = 1000;
   private ignoreConfig: IgnoreConfig;
+  private initialized = false;
 
   constructor(config: ContextConfig) {
     this.config = config;
@@ -194,13 +195,22 @@ export class ContextStorage {
           CREATE INDEX IF NOT EXISTS idx_events_session ON events(session)
         `, (err) => {
           if (err) reject(err);
-          else resolve();
+          else {
+            this.initialized = true;
+            resolve();
+          }
         });
       });
     });
   }
 
+  async ensureReady(): Promise<void> {
+    if (this.initialized) return;
+    await this.initialize();
+  }
+
   async record(event: Omit<ContextEvent, 'id' | 'timestamp'>): Promise<ContextEvent> {
+    await this.ensureReady();
     // Validation
     if (!this.validateEventData(event.data)) {
       throw new Error('Event data too large or invalid');
@@ -252,6 +262,7 @@ export class ContextStorage {
   }
 
   async query(query: ContextQuery): Promise<ContextEvent[]> {
+    await this.ensureReady();
     let sql = 'SELECT * FROM events WHERE 1=1';
     const params: any[] = [];
 
@@ -321,6 +332,9 @@ export class ContextStorage {
   }
 
   async close(): Promise<void> {
+    if (!this.initialized || !this.db) {
+      return;
+    }
     return new Promise((resolve, reject) => {
       this.db.close((err) => {
         if (err) reject(err);
